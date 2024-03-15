@@ -17,6 +17,7 @@ use librespot_protocol as protocol;
 use protobuf::Message;
 
 pub use crate::protocol::metadata::AudioFile_Format as FileFormat;
+pub use crate::protocol::metadata::Date;
 
 fn countrylist_contains(list: &str, country: &str) -> bool {
     list.chunks(2).any(|cc| cc == country)
@@ -195,6 +196,8 @@ pub struct Episode {
     pub external_url: String,
     pub duration: i32,
     pub language: String,
+    pub description: String,
+    pub publish_time: Date,
     pub show: SpotifyId,
     pub files: HashMap<FileFormat, FileId>,
     pub covers: Vec<FileId>,
@@ -455,6 +458,8 @@ impl Metadata for Episode {
             external_url: msg.get_external_url().to_owned(),
             duration: msg.get_duration().to_owned(),
             language: msg.get_language().to_owned(),
+            description: msg.get_description().to_owned(),
+            publish_time: msg.get_publish_time().to_owned(),
             show: SpotifyId::from_raw(msg.get_show().get_gid()).unwrap(),
             covers,
             files,
